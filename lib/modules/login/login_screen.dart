@@ -6,7 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../layout/home_layout.dart';
 import '../../shared/components/components.dart';
-import '../register_screen/register_screen.dart';
+import '../register/register_screen.dart';
 import 'login_cubit/login_cubit.dart';
 import 'login_cubit/login_states.dart';
 
