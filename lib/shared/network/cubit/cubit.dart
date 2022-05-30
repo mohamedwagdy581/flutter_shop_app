@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_shop_app/models/categories_model.dart';
 import 'package:flutter_shop_app/models/home_model.dart';
 import 'package:flutter_shop_app/modules/categories/categories_screen.dart';
 import 'package:flutter_shop_app/modules/favorites/favorites_screen.dart';
@@ -75,7 +76,6 @@ class AppCubit extends Cubit<AppStates>
   }
 
   // Function to Get Home Data with API by using Dio
-
   HomeModel? homeModel;
   void getHomeData()
   {
@@ -94,57 +94,22 @@ class AppCubit extends Cubit<AppStates>
     });
   }
 
-  // // Function to Get Business Data With API by using Dio
-  // List<dynamic> business = [];
-  // void getBusinessData()
-  // {
-  //   emit(AppGetHomeLoadingState());
-  //   if(business.isEmpty)
-  //   {
-  //     DioHelper.getData(
-  //       url: 'v2/top-headlines',
-  //       query:
-  //       {
-  //         'country':'eg',
-  //         'category':'business',
-  //         'apiKey':'1f52d78ad5974c76986eb277605f552a',
-  //       },
-  //     ).then((value)
-  //     {
-  //       business = value.data['articles'];
-  //       emit(AppGetHomeSuccessState());
-  //     }).catchError((error)
-  //     {
-  //       emit(AppGetHomeErrorState(error.toString()));
-  //     });
-  //   }else
-  //     {
-  //       emit(AppGetHomeSuccessState());
-  //     }
-
-  // }
-
-  // // Function to Get Science Data With API
-  // List<dynamic> search = [];
-  // void getSearchData(String value)
-  // {
-  //   emit(AppGetSearchLoadingState());
-  //   DioHelper.getData(
-  //     url: 'v2/everything',
-  //     query:
-  //     {
-  //       'q':value,
-  //       'apiKey':'1f52d78ad5974c76986eb277605f552a',
-  //     },
-  //   ).then((value)
-  //   {
-  //     search = value.data['articles'];
-  //     emit(AppGetSearchSuccessState());
-  //   }).catchError((error)
-  //   {
-  //     emit(AppGetSearchErrorState(error.toString()));
-  //   });
-  // }
+  // Function to Get Categories Data with API by using Dio
+  CategoriesModel? categoriesModel;
+  void getCategoriesModel()
+  {
+    DioHelper.getData(
+      url: GET_CATEGORIES,
+      token: token,
+      ).then((value) 
+    {
+      categoriesModel = CategoriesModel.fromJson(value.data);
+      emit(AppGetCategoriesSuccessState());
+    }).catchError((error)
+    {
+      emit(AppGetCategoriesErrorState(error));
+    });
+  }
 
   // Function to Change Theme mode
   bool isDark = false;

@@ -18,6 +18,16 @@ class AppGetHomeErrorState extends AppStates
   AppGetHomeErrorState(this.error);
 }
 
+// Get Categories Data From API State
+class AppGetCategoriesSuccessState extends AppStates {}
+
+class AppGetCategoriesErrorState extends AppStates
+{
+  final String error;
+
+  AppGetCategoriesErrorState(this.error);
+}
+
 // Get Search Data From API State
 class AppGetSearchLoadingState extends AppStates {}
 
