@@ -6,16 +6,16 @@ class AppInitialState extends AppStates {}
 // BottomNavigationBar State
 class AppBottomNavigationBarState extends AppStates {}
 
-// Get Business Data From API State
-class AppGetBusinessLoadingState extends AppStates {}
+// Get Home Data From API State
+class AppGetHomeLoadingState extends AppStates {}
 
-class AppGetBusinessSuccessState extends AppStates {}
+class AppGetHomeSuccessState extends AppStates {}
 
-class AppGetBusinessErrorState extends AppStates
+class AppGetHomeErrorState extends AppStates
 {
   final String error;
 
-  AppGetBusinessErrorState(this.error);
+  AppGetHomeErrorState(this.error);
 }
 
 // Get Search Data From API State

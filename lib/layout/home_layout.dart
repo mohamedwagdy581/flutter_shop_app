@@ -1,43 +1,51 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_shop_app/modules/login_screen/login_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop_app/shared/components/components.dart';
-import 'package:flutter_shop_app/shared/network/local/cache_helper.dart';
+import 'package:flutter_shop_app/shared/network/cubit/cubit.dart';
+import 'package:flutter_shop_app/shared/network/cubit/states.dart';
+
+import '../modules/search/search_screen.dart';
 
 class HomeLayout extends StatelessWidget {
   const HomeLayout({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Column(
-        children: [
-          const Text(
-            'Home',
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
-            ),
-            ),
-            const SizedBox(
-              height: 40.0,
-            ), 
+    return BlocConsumer<AppCubit, AppStates>(
+      listener: (BuildContext context, AppStates state) {},
+      builder: (BuildContext context, AppStates state) 
+      {
 
-            defaultTextButton(
+        var cubit = AppCubit.get(context);
+
+
+        return Scaffold(
+        appBar: AppBar(
+          title: Text(cubit.appBarTitle[cubit.currentIndex],),
+          actions: 
+          [
+            IconButton(
               onPressed: ()
               {
-                CacheHelper.removeData(key: 'token').then((value) 
-                {
-                  if(value)
-                  {
-                    navigateAndFinish(context, LoginScreen());
-                  }
-                });
+                navigateTo(context, const SearchScreen(),);
               }, 
-              text: 'sign out',
-            ),
-        ],
-      ),
+              icon:  const Icon(
+                Icons.search,
+                ),
+                ),
+          ],
+        ),
+        body: cubit.screens[cubit.currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          onTap: (index)
+          {
+            cubit.changeBottomNavBar(cubit.currentIndex);
+          },
+          currentIndex: cubit.currentIndex,
+          items: cubit.bottomNavItem,
+        ),
+    );
+    },
     );
   }
 }
