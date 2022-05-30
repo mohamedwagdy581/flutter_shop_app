@@ -13,11 +13,6 @@ class LoginSuccessState extends LoginStates
   LoginSuccessState(this.loginModel);
 }
 
-class LoginErrorState extends LoginStates
-{
-  final error;
-
-  LoginErrorState(this.error);
-}
+class LoginErrorState extends LoginStates {}
 
 class LoginChangePasswordVisibilityState extends LoginStates {}

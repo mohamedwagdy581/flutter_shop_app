@@ -105,6 +105,7 @@ void showToast (
               );
 
 
+// ignore: constant_identifier_names
 enum ToastStates {SUCCESS, ERROR, WARNING}
 
 Color? chooseToastColor (ToastStates state)

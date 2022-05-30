@@ -86,7 +86,6 @@ class AppCubit extends Cubit<AppStates>
       ).then((value) 
     {
       homeModel = HomeModel.fromJson(value.data);
-      print(homeModel?.data?.banners[0].image);
       emit(AppGetHomeSuccessState());
     }).catchError((error)
     {

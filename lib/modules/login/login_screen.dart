@@ -2,7 +2,6 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop_app/shared/network/local/cache_helper.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../layout/home_layout.dart';
 import '../../shared/components/components.dart';
@@ -10,6 +9,7 @@ import '../register/register_screen.dart';
 import 'login_cubit/login_cubit.dart';
 import 'login_cubit/login_states.dart';
 
+// ignore: must_be_immutable
 class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
@@ -35,8 +35,6 @@ class LoginScreen extends StatelessWidget {
                 navigateAndFinish(context, const HomeLayout());
               });
               showToast(message: '${state.loginModel?.message}', state: ToastStates.SUCCESS,);
-              print(state.loginModel?.message);
-              print(state.loginModel?.data?.token);
             }else
             {
               showToast(message: '${state.loginModel?.message}', state: ToastStates.ERROR,);
