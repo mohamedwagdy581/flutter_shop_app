@@ -196,9 +196,13 @@ class ProductsScreen extends StatelessWidget {
 
                       IconButton(
                         onPressed: (){}, 
-                        icon: const Icon(
-                          Icons.favorite_border,
-                          ),
+                        icon: CircleAvatar(
+                          backgroundColor: Colors.grey[300],
+                          child: const Icon(
+                            Icons.favorite_border,
+                            color: Colors.white,
+                            ),
+                        ),
                         ),
                   ],
                   ),
