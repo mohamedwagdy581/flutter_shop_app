@@ -73,14 +73,12 @@ class AppCubit extends Cubit<AppStates> {
   // Function to Get Home Data with API by using Dio
   HomeModel? homeModel;
   void getHomeData() {
-    emit(AppGetHomeLoadingState());
+    //emit(AppGetHomeLoadingState());
     DioHelper.getData(
       url: HOME,
       token: token,
     ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
-      printFullText(value.data);
-      // printFullText('${homeModel!.data!.banners[0].image}');
       emit(AppGetHomeSuccessState());
     }).catchError((error) {
       printFullText(error.toString());

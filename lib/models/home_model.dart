@@ -14,11 +14,11 @@ class HomeModelData {
 
   HomeModelData.fromJson(Map<String, dynamic> json) {
     json['banners'].forEach((element) {
-      banners.add(element);
+      banners.add(BannerModel.fromJson(element));
     });
 
     json['products'].forEach((element) {
-      products.add(element);
+      products.add(ProductModel.fromjson(element));
     });
   }
 }

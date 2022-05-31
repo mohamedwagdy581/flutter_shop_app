@@ -83,7 +83,7 @@ class ProductsScreen extends StatelessWidget {
                     height: 10.0,
                   ),
                   SizedBox(
-                    height: 100.0,
+                    height: 120.0,
                     child: ListView.separated(
                       physics: const BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
@@ -143,11 +143,12 @@ class ProductsScreen extends StatelessWidget {
                 if (model.discount != 0)
                   Container(
                     color: Colors.red,
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
                     child: const Text(
                       'DISCOUNT',
                       style: TextStyle(
-                        fontSize: 8.0,
+                        fontSize: 13.0,
+                        fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
@@ -216,19 +217,22 @@ class ProductsScreen extends StatelessWidget {
               '${model.image}',
             ),
             width: 100,
-            height: 100,
+            height: 110,
             fit: BoxFit.cover,
           ),
           Container(
             width: 100,
-            color: Colors.black.withOpacity(0.8),
+            height: 20,
+            color: Colors.black.withOpacity(0.7),
             child: Text(
               '${model.name}',
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 15.0,
+                fontSize: 13.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
             ),
           ),

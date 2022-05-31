@@ -18,7 +18,7 @@ class DioHelper {
     String lang = 'en',
     String? token,
   }) async {
-    dio.options.headers = {
+     dio.options.headers = {
       'Content-Type': 'application/json',
       'lang': lang,
       'Authorization': token ?? '',
