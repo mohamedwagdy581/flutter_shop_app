@@ -72,6 +72,7 @@ class AppCubit extends Cubit<AppStates> {
 
   // Function to Get Home Data with API by using Dio
   HomeModel? homeModel;
+  Map<int, bool>? favorite = {};
   void getHomeData() {
     //emit(AppGetHomeLoadingState());
     DioHelper.getData(
@@ -79,6 +80,14 @@ class AppCubit extends Cubit<AppStates> {
       token: token,
     ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
+
+      homeModel!.data!.products.forEach((element)
+      {
+        favorite!.addAll(
+            {
+              element.id! : element.inFavorite!,
+            });
+      });
       emit(AppGetHomeSuccessState());
     }).catchError((error) {
       printFullText(error.toString());
