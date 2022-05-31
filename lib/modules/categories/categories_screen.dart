@@ -11,36 +11,38 @@ class CategoriesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (BuildContext context, AppStates state) {},
-      builder: (BuildContext context, AppStates state) 
-      {
+      builder: (BuildContext context, AppStates state) {
         return ListView.separated(
-        itemBuilder: (context, index) => buildCatItem(AppCubit.get(context).categoriesModel!.data!.data[index]), 
-        separatorBuilder: (context, index) => const Divider(thickness: 2,), 
-        itemCount: AppCubit.get(context).categoriesModel!.data!.data.length,
+          itemBuilder: (context, index) => buildCatItem(
+              AppCubit.get(context).categoriesModel!.data!.data[index]),
+          separatorBuilder: (context, index) => const Divider(
+            thickness: 2,
+          ),
+          itemCount: AppCubit.get(context).categoriesModel!.data!.data.length,
         );
       },
     );
   }
 
   Widget buildCatItem(DataModel model) => Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: ListTile(
-        leading: Image(
-          image: NetworkImage('${model.image}'),
-          height: 100.0,
-          width: 100.0,
+        padding: const EdgeInsets.all(20.0),
+        child: ListTile(
+          leading: Image(
+            image: NetworkImage('${model.image}'),
+            height: 100.0,
+            width: 100.0,
           ),
-        title: Text(
-          '${model.name}',
-          style: const TextStyle(
-            fontSize: 20.0,
-            fontWeight: FontWeight.bold,
-          ),
+          title: Text(
+            '${model.name}',
+            style: const TextStyle(
+              fontSize: 20.0,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           trailing: IconButton(
-            onPressed: (){}, 
+            onPressed: () {},
             icon: const Icon(Icons.arrow_forward_ios),
-            ),
-      ),
-    );
+          ),
+        ),
+      );
 }

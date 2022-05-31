@@ -17,9 +17,11 @@ class ProductsScreen extends StatelessWidget {
       listener: (BuildContext context, AppStates state) {},
       builder: (BuildContext context, AppStates state) {
         return ConditionalBuilder(
-          condition: AppCubit.get(context).homeModel != null && AppCubit.get(context).categoriesModel != null,
-          builder: (context) =>
-              productsBuilder(AppCubit.get(context).homeModel!, AppCubit.get(context).categoriesModel!),
+          condition: AppCubit.get(context).homeModel != null &&
+              AppCubit.get(context).categoriesModel != null,
+          builder: (context) => productsBuilder(
+              AppCubit.get(context).homeModel!,
+              AppCubit.get(context).categoriesModel!),
           fallback: (context) => const Center(
             child: CircularProgressIndicator(),
           ),
@@ -28,8 +30,9 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget productsBuilder(HomeModel model, CategoriesModel categoriesModel) => SingleChildScrollView(
-    physics: const BouncingScrollPhysics(),
+  Widget productsBuilder(HomeModel model, CategoriesModel categoriesModel) =>
+      SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             CarouselSlider(
@@ -64,61 +67,57 @@ class ProductsScreen extends StatelessWidget {
             const SizedBox(
               height: 10.0,
             ),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: 
-                [
+                children: [
                   const Text(
-                'Categories',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w800,
-                ),
-                ),
-                const SizedBox(
-                height: 10.0,
-              ),
-
-              SizedBox(
-                height: 100.0,
-                child: ListView.separated(
-                  physics: const BouncingScrollPhysics(),
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) => buildCategoryItem(categoriesModel.data!.data[index]), 
-                  separatorBuilder: (context, index) => const SizedBox(width: 10.0,), 
-                  itemCount: categoriesModel.data!.data.length,
+                    'Categories',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
-              ),
-
-              const SizedBox(
-                height: 20.0,
-              ),
-
-              const Text(
-                'New Products',
-                style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w800,
-                ),
-                ),
+                  const SizedBox(
+                    height: 10.0,
+                  ),
+                  SizedBox(
+                    height: 100.0,
+                    child: ListView.separated(
+                      physics: const BouncingScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (context, index) =>
+                          buildCategoryItem(categoriesModel.data!.data[index]),
+                      separatorBuilder: (context, index) => const SizedBox(
+                        width: 10.0,
+                      ),
+                      itemCount: categoriesModel.data!.data.length,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20.0,
+                  ),
+                  const Text(
+                    'New Products',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ],
               ),
             ),
-
-              const SizedBox(
+            const SizedBox(
               height: 10.0,
             ),
-
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               mainAxisSpacing: 2.0,
               crossAxisSpacing: 2.0,
-              childAspectRatio: 1 / 1.45, 
+              childAspectRatio: 1 / 1.45,
               children: List.generate(
                 model.data!.products.length,
                 (index) => buildGridViewProduct(model.data!.products[index]),
@@ -141,19 +140,18 @@ class ProductsScreen extends StatelessWidget {
                   width: double.infinity,
                   height: 150.0,
                 ),
-
-                if(model.discount != 0)
-                Container(
-                  color: Colors.red,
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: const Text(
-                    'DISCOUNT',
-                    style: TextStyle(
-                      fontSize: 8.0,
-                      color: Colors.white,
+                if (model.discount != 0)
+                  Container(
+                    color: Colors.red,
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: const Text(
+                      'DISCOUNT',
+                      style: TextStyle(
+                        fontSize: 8.0,
+                        color: Colors.white,
+                      ),
                     ),
-                    ),
-                ),
+                  ),
               ],
             ),
             Padding(
@@ -181,30 +179,27 @@ class ProductsScreen extends StatelessWidget {
                       const SizedBox(
                         width: 10.0,
                       ),
-
-                      if(model.discount != 0)
-                      Text(
-                        '${model.oldPrice.round()}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey,
-                          decoration: TextDecoration.lineThrough,
+                      if (model.discount != 0)
+                        Text(
+                          '${model.oldPrice.round()}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                            decoration: TextDecoration.lineThrough,
+                          ),
                         ),
-                      ),
-
                       const Spacer(),
-
                       IconButton(
-                        onPressed: (){}, 
+                        onPressed: () {},
                         icon: CircleAvatar(
                           backgroundColor: Colors.grey[300],
                           child: const Icon(
                             Icons.favorite_border,
                             color: Colors.white,
-                            ),
+                          ),
                         ),
-                        ),
-                  ],
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -213,33 +208,30 @@ class ProductsScreen extends StatelessWidget {
         ),
       );
 
-  Widget buildCategoryItem (DataModel model) =>Stack(
-              alignment: AlignmentDirectional.bottomCenter,
-              children: 
-              [
-                Image(
-                  image: NetworkImage(
-                    '${model.image}',
-                    ),
-                    width: 100,
-                    height: 100,
-                    fit: BoxFit.cover,
-                    ),
-
-                    Container(
-                      width: 100,
-                      color: Colors.black.withOpacity(0.8),
-                      child: Text(
-                        '${model.name}',
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 15.0,
-                        ),
-                        ),
-                    ),
-              ],
-            );
-
+  Widget buildCategoryItem(DataModel model) => Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          Image(
+            image: NetworkImage(
+              '${model.image}',
+            ),
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+          ),
+          Container(
+            width: 100,
+            color: Colors.black.withOpacity(0.8),
+            child: Text(
+              '${model.name}',
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 15.0,
+              ),
+            ),
+          ),
+        ],
+      );
 }

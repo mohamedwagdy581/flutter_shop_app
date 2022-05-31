@@ -12,19 +12,17 @@ import 'package:flutter_shop_app/shared/network/end_points.dart';
 import '../local/cache_helper.dart';
 import '../remote/dio_helper.dart';
 
-class AppCubit extends Cubit<AppStates>
-{
-  AppCubit() :super(AppInitialState());
+class AppCubit extends Cubit<AppStates> {
+  AppCubit() : super(AppInitialState());
 
   // Get context to Easily use in a different places in all Project
-  static AppCubit get(context)=> BlocProvider.of(context);
+  static AppCubit get(context) => BlocProvider.of(context);
   //__________________
 
   int currentIndex = 0;
 
   // List of AppBar Titles
-  List<String> appBarTitle = const
-  [
+  List<String> appBarTitle = const [
     'Products',
     'Categories',
     'Favorites',
@@ -32,8 +30,7 @@ class AppCubit extends Cubit<AppStates>
   ];
 
   // List of Screens
-  List<Widget> screens = const
-  [
+  List<Widget> screens = const [
     ProductsScreen(),
     CategoriesScreen(),
     FavoritesScreen(),
@@ -41,14 +38,12 @@ class AppCubit extends Cubit<AppStates>
   ];
 
   // The List of BottomNavigationBar Items to move between Screens
-  List<BottomNavigationBarItem> bottomNavItem = const
-  [
+  List<BottomNavigationBarItem> bottomNavItem = const [
     BottomNavigationBarItem(
         icon: Icon(
           Icons.production_quantity_limits,
         ),
-        label: 'Products'
-    ),
+        label: 'Products'),
     BottomNavigationBarItem(
       icon: Icon(
         Icons.category_outlined,
@@ -70,62 +65,54 @@ class AppCubit extends Cubit<AppStates>
   ];
 
   // Function To Change BottomNavigationBar Items by emit The State
-  void changeBottomNavBar (int index)
-  {
+  void changeBottomNavBar(int index) {
+    currentIndex = index;
     emit(AppBottomNavigationBarState());
   }
 
   // Function to Get Home Data with API by using Dio
   HomeModel? homeModel;
-  void getHomeData()
-  {
+  void getHomeData() {
     emit(AppGetHomeLoadingState());
     DioHelper.getData(
       url: HOME,
       token: token,
-      ).then((value) 
-    {
+    ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
+      printFullText(value.data);
+      // printFullText('${homeModel!.data!.banners[0].image}');
       emit(AppGetHomeSuccessState());
-    }).catchError((error)
-    {
+    }).catchError((error) {
+      printFullText(error.toString());
       emit(AppGetHomeErrorState(error));
     });
   }
 
   // Function to Get Categories Data with API by using Dio
   CategoriesModel? categoriesModel;
-  void getCategoriesModel()
-  {
+  void getCategoriesModel() {
     DioHelper.getData(
       url: GET_CATEGORIES,
       token: token,
-      ).then((value) 
-    {
+    ).then((value) {
       categoriesModel = CategoriesModel.fromJson(value.data);
       emit(AppGetCategoriesSuccessState());
-    }).catchError((error)
-    {
+    }).catchError((error) {
       emit(AppGetCategoriesErrorState(error));
     });
   }
 
   // Function to Change Theme mode
   bool isDark = false;
-  void changeAppModeTheme({bool? fromShared})
-  {
-    if(fromShared != null)
-    {
+  void changeAppModeTheme({bool? fromShared}) {
+    if (fromShared != null) {
       isDark = fromShared;
       emit(AppChangeModeThemeState());
-    }else
-    {
+    } else {
       isDark = !isDark;
-      CacheHelper.setBoolean(key: 'isDark', value: isDark).then((value)
-      {
+      CacheHelper.setBoolean(key: 'isDark', value: isDark).then((value) {
         emit(AppChangeModeThemeState());
       });
     }
   }
-
 }
