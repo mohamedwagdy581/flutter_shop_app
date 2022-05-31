@@ -127,6 +127,7 @@ class ProductsScreen extends StatelessWidget {
         ),
       );
 
+  // The GridView
   Widget buildGridViewProduct(ProductModel model) => Container(
         color: Colors.white,
         child: Column(
