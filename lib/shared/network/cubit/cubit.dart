@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop_app/models/categories_model.dart';
+import 'package:flutter_shop_app/models/change_favorites_model.dart';
 import 'package:flutter_shop_app/models/home_model.dart';
 import 'package:flutter_shop_app/modules/categories/categories_screen.dart';
 import 'package:flutter_shop_app/modules/favorites/favorites_screen.dart';
@@ -72,7 +73,7 @@ class AppCubit extends Cubit<AppStates> {
 
   // Function to Get Home Data with API by using Dio
   HomeModel? homeModel;
-  Map<int, bool>? favorite = {};
+  Map<int, bool> favorites = {};
   void getHomeData() {
     emit(AppGetHomeLoadingState());
     DioHelper.getData(
@@ -81,12 +82,12 @@ class AppCubit extends Cubit<AppStates> {
     ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
       for (var element in homeModel!.data!.products) {
-        favorite!.addAll({
+        favorites.addAll({
           element.id!: element.inFavorite!,
         });
       }
 
-      printFullText(favorite.toString());
+      printFullText(favorites.toString());
       emit(AppGetHomeSuccessState());
     }).catchError((error) {
       printFullText(error.toString());
@@ -120,5 +121,33 @@ class AppCubit extends Cubit<AppStates> {
         emit(AppChangeModeThemeState());
       });
     }
+  }
+
+  // Change Favorites
+  ChangeFavotitesModel? changeFavotitesModel;
+  void changeFavorites(int productId) {
+    favorites[productId] = !favorites[productId]!;
+
+    emit(AppChangeFavoritesState());
+
+    DioHelper.postData(
+      url: FAVORITES,
+      data: {
+        'product_id': productId,
+      },
+      token: token,
+    ).then((value) {
+      changeFavotitesModel = ChangeFavotitesModel.fromJson(value.data);
+
+      if (!changeFavotitesModel!.status!) {
+        favorites[productId] = !favorites[productId]!;
+      }
+
+      emit(AppChangeFavoritesSuccessState(changeFavotitesModel!));
+    }).catchError((error) {
+      favorites[productId] = !favorites[productId]!;
+
+      emit(AppChangeFavoritesErrorState());
+    });
   }
 }

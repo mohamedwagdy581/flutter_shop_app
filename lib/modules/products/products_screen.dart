@@ -3,7 +3,9 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop_app/models/categories_model.dart';
+import 'package:flutter_shop_app/models/change_favorites_model.dart';
 import 'package:flutter_shop_app/models/home_model.dart';
+import 'package:flutter_shop_app/shared/components/components.dart';
 import 'package:flutter_shop_app/shared/network/cubit/cubit.dart';
 import 'package:flutter_shop_app/shared/network/cubit/states.dart';
 import 'package:flutter_shop_app/shared/style/colors.dart';
@@ -14,14 +16,21 @@ class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
-      listener: (BuildContext context, AppStates state) {},
+      listener: (BuildContext context, AppStates state) {
+        if (state is AppChangeFavoritesSuccessState) {
+          if (!state.model.status!) {
+            showToast(message: state.model.message!, state: ToastStates.ERROR);
+          }
+        }
+      },
       builder: (BuildContext context, AppStates state) {
         return ConditionalBuilder(
           condition: AppCubit.get(context).homeModel != null &&
               AppCubit.get(context).categoriesModel != null,
           builder: (context) => productsBuilder(
-              AppCubit.get(context).homeModel!,
-              AppCubit.get(context).categoriesModel!),
+            AppCubit.get(context).homeModel!,
+            AppCubit.get(context).categoriesModel!,
+          ),
           fallback: (context) => const Center(
             child: CircularProgressIndicator(),
           ),
@@ -30,7 +39,10 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget productsBuilder(HomeModel model, CategoriesModel categoriesModel) =>
+  Widget productsBuilder(
+    HomeModel model,
+    CategoriesModel categoriesModel,
+  ) =>
       SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -120,7 +132,9 @@ class ProductsScreen extends StatelessWidget {
               childAspectRatio: 1 / 1.45,
               children: List.generate(
                 model.data!.products.length,
-                (index) => buildGridViewProduct(model.data!.products[index]),
+                (index) => buildGridViewProduct(
+                  model.data!.products[index],
+                ),
               ),
             ),
           ],
@@ -128,7 +142,10 @@ class ProductsScreen extends StatelessWidget {
       );
 
   // The GridView
-  Widget buildGridViewProduct(ProductModel model) => Container(
+  Widget buildGridViewProduct(
+    ProductModel model,
+  ) =>
+      Container(
         color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,10 +209,13 @@ class ProductsScreen extends StatelessWidget {
                         ),
                       const Spacer(),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          print(model.id);
+                        },
                         icon: CircleAvatar(
                           radius: 14.0,
-                          backgroundColor: Colors.grey[300],
+                          backgroundColor:
+                              false ? Colors.red : Colors.grey[300],
                           child: const Icon(
                             Icons.favorite_border,
                             size: 18.0,
@@ -241,4 +261,102 @@ class ProductsScreen extends StatelessWidget {
           ),
         ],
       );
+}
+
+class BuildGridViewProduct extends StatelessWidget {
+  const BuildGridViewProduct({super.key, required this.model});
+
+  final ProductModel model;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            alignment: AlignmentDirectional.bottomStart,
+            children: [
+              Image(
+                image: NetworkImage(model.image!),
+                width: double.infinity,
+                height: 150.0,
+              ),
+              if (model.discount != 0)
+                Container(
+                  color: Colors.red,
+                  padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                  child: const Text(
+                    'DISCOUNT',
+                    style: TextStyle(
+                      fontSize: 13.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${model.name}',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    height: 1.3,
+                  ),
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${model.price.round()}',
+                      style: const TextStyle(
+                        color: defaultColor,
+                        fontSize: 13.0,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10.0,
+                    ),
+                    if (model.discount != 0)
+                      Text(
+                        '${model.oldPrice.round()}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                          decoration: TextDecoration.lineThrough,
+                        ),
+                      ),
+                    const Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        print(model.id);
+                      },
+                      icon: CircleAvatar(
+                        radius: 14.0,
+                        backgroundColor:
+                            AppCubit.get(context).favorites[model.id]!
+                                ? Colors.red
+                                : Colors.grey[300],
+                        child: const Icon(
+                          Icons.favorite_border,
+                          size: 18.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
