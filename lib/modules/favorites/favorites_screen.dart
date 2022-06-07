@@ -14,9 +14,13 @@ class FavoritesScreen extends StatelessWidget {
       listener: (BuildContext context, AppStates state) {},
       builder: (BuildContext context, AppStates state) {
         return ListView.separated(
+          physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) => buildFavProduct(),
-          separatorBuilder: (context, index) => const Divider(
-            thickness: 2,
+          separatorBuilder: (context, index) => const Padding(
+            padding: EdgeInsets.only(left: 20.0),
+            child: Divider(
+              thickness: 2,
+            ),
           ),
           itemCount: 15,
         );
@@ -24,16 +28,17 @@ class FavoritesScreen extends StatelessWidget {
     );
   }
 
+// New Widget to build Favorite Product UI
   Widget buildFavProduct() => Padding(
         padding: const EdgeInsets.all(20.0),
         child: SizedBox(
-          height: 100,
+          height: 120.0,
           child: Row(
             children: [
               Stack(
                 alignment: AlignmentDirectional.bottomStart,
                 children: [
-                  Image(
+                  const Image(
                     image: NetworkImage(
                         'https://th.bing.com/th/id/R.300756144ee94c0048440274a043e0ec?rik=f25T4LKGDOQzQQ&pid=ImgRaw&r=0'),
                     width: 100,
@@ -62,19 +67,20 @@ class FavoritesScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
+                    const Text(
                       '{model.name}',
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
+                      style: TextStyle(
                         height: 1.3,
                       ),
                     ),
+                    const Spacer(),
                     Row(
                       children: [
-                        Text(
+                        const Text(
                           '2000',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: defaultColor,
                             fontSize: 13.0,
                           ),
@@ -83,9 +89,9 @@ class FavoritesScreen extends StatelessWidget {
                           width: 10.0,
                         ),
                         if (1 != 0)
-                          Text(
+                          const Text(
                             '5000',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
                               color: Colors.grey,
                               decoration: TextDecoration.lineThrough,
@@ -96,11 +102,10 @@ class FavoritesScreen extends StatelessWidget {
                           onPressed: () {
                             //print(model.id);
                           },
-                          icon: CircleAvatar(
+                          icon: const CircleAvatar(
                             radius: 14.0,
-                            backgroundColor:
-                                true ? Colors.red : Colors.grey[300],
-                            child: const Icon(
+                            backgroundColor: Colors.red,
+                            child: Icon(
                               Icons.favorite_border,
                               size: 18.0,
                               color: Colors.white,

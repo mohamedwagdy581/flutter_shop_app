@@ -81,16 +81,16 @@ class AppCubit extends Cubit<AppStates> {
       token: token,
     ).then((value) {
       homeModel = HomeModel.fromJson(value.data);
-      for (var element in homeModel!.data!.products) {
+      for (var element in homeModel!.data.products) {
         favorites.addAll({
-          element.id!: element.inFavorite!,
+          element.id: element.inFavorite!,
         });
       }
 
-      printFullText(favorites.toString());
+      //printFullText(favorites.toString());
       emit(AppGetHomeSuccessState());
     }).catchError((error) {
-      printFullText(error.toString());
+      //printFullText(error.toString());
       emit(AppGetHomeErrorState(error.toString()));
     });
   }
