@@ -10,6 +10,7 @@ import 'package:flutter_shop_app/modules/settings/settings_screen.dart';
 import 'package:flutter_shop_app/shared/components/constants.dart';
 import 'package:flutter_shop_app/shared/network/cubit/states.dart';
 import 'package:flutter_shop_app/shared/network/end_points.dart';
+import '../../../models/login_model.dart';
 import '../local/cache_helper.dart';
 import '../remote/dio_helper.dart';
 
@@ -31,10 +32,10 @@ class AppCubit extends Cubit<AppStates> {
   ];
 
   // List of Screens
-  List<Widget> screens = const [
-    ProductsScreen(),
-    CategoriesScreen(),
-    FavoritesScreen(),
+  List<Widget> screens = [
+    const ProductsScreen(),
+    const CategoriesScreen(),
+    const FavoritesScreen(),
     SettingsScreen(),
   ];
 
@@ -148,6 +149,48 @@ class AppCubit extends Cubit<AppStates> {
       favorites[productId] = !favorites[productId]!;
 
       emit(AppChangeFavoritesErrorState());
+    });
+  }
+
+  // Get User Data
+  LoginModel? userModel;
+  void getUserData() {
+    emit(AppGetUserDataLoadingState());
+
+    DioHelper.getData(
+      url: PROFILE,
+      token: token,
+    ).then((value) {
+      userModel = LoginModel.fromJson(value.data);
+
+      emit(AppGetUserDataSuccessState(userModel));
+    }).catchError((error) {
+      emit(AppGetUserDataErrorState(error));
+    });
+  }
+
+  // Update User Data
+  void updateUserData({
+    required String name,
+    required String email,
+    required String phone,
+  }) {
+    emit(AppUpdateUserDataLoadingState());
+
+    DioHelper.putData(
+      url: UPDATE_PROFILE,
+      token: token,
+      data: {
+        'name': name,
+        'email': email,
+        'phone': phone,
+      },
+    ).then((value) {
+      userModel = LoginModel.fromJson(value.data);
+
+      emit(AppUpdateUserDataSuccessState(userModel));
+    }).catchError((error) {
+      emit(AppUpdateUserDataErrorState(error));
     });
   }
 }

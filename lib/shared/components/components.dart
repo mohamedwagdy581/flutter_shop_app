@@ -25,10 +25,10 @@ Widget defaultTextFormField({
   required TextEditingController? controller,
   required TextInputType keyboardType,
   required String? label,
-  required VoidCallback? onTap,
+  VoidCallback? onTap,
   required String? Function(String?)? validator,
   Function(String)? onSubmitted,
-  required bool secure,
+  bool secure = false,
   required IconData? prefix,
   IconData? suffix,
   VoidCallback? suffixPressed,
@@ -79,37 +79,35 @@ Widget defaultButton({
 Widget defaultTextButton({
   required VoidCallback onPressed,
   required String text,
-}) => TextButton(
-    onPressed: onPressed,
-    child: Text(
-      text.toUpperCase(),
-      style: const TextStyle(
-        fontSize: 15.0,
-        fontWeight: FontWeight.bold,
+}) =>
+    TextButton(
+      onPressed: onPressed,
+      child: Text(
+        text.toUpperCase(),
+        style: const TextStyle(
+          fontSize: 15.0,
+          fontWeight: FontWeight.bold,
+        ),
       ),
-    ),
-);
+    );
 
-void showToast (
-  {
-    required String message,
-    required ToastStates state,
-  }) => Fluttertoast.showToast(
-                  msg: message,
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.BOTTOM,
-                  timeInSecForIosWeb: 5,
-                  backgroundColor: chooseToastColor(state),
-                  textColor: Colors.white,
-                  fontSize: 16.0
-              );
-
+void showToast({
+  required String message,
+  required ToastStates state,
+}) =>
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 5,
+        backgroundColor: chooseToastColor(state),
+        textColor: Colors.white,
+        fontSize: 16.0);
 
 // ignore: constant_identifier_names
-enum ToastStates {SUCCESS, ERROR, WARNING}
+enum ToastStates { SUCCESS, ERROR, WARNING }
 
-Color? chooseToastColor (ToastStates state)
-{
+Color? chooseToastColor(ToastStates state) {
   Color? color;
 
   switch (state) {

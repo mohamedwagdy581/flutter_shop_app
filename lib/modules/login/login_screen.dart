@@ -1,6 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_shop_app/shared/components/constants.dart';
 import 'package:flutter_shop_app/shared/network/local/cache_helper.dart';
 
 import '../../layout/home_layout.dart';
@@ -14,30 +15,40 @@ class LoginScreen extends StatelessWidget {
   LoginScreen({Key? key}) : super(key: key);
 
   late var formKey = GlobalKey<FormState>();
-
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
-
     return BlocProvider(
       create: (BuildContext context) => LoginCubit(),
       child: BlocConsumer<LoginCubit, LoginStates>(
-        listener: (context, state)
-        {
-          if (state is LoginSuccessState)
-          {
-            if(state.loginModel!.status!)
-            {
-              CacheHelper.saveData(key: 'token', value: state.loginModel?.data?.token,).then((value) 
-              {
-                navigateAndFinish(context, const HomeLayout());
+        listener: (context, state) {
+          if (state is LoginSuccessState) {
+            if (state.loginModel!.status!) {
+              // CacheHelper to save token or Authorization and navigate and finish to the main home screen
+              CacheHelper.saveData(
+                key: 'token',
+                value: state.loginModel?.data?.token,
+              ).then((value) {
+                token = state.loginModel?.data?.token;
+
+                navigateAndFinish(
+                  context,
+                  const HomeLayout(),
+                );
               });
-              showToast(message: '${state.loginModel?.message}', state: ToastStates.SUCCESS,);
-            }else
-            {
-              showToast(message: '${state.loginModel?.message}', state: ToastStates.ERROR,);
+              // Show Toast if success in green color
+              showToast(
+                message: '${state.loginModel?.message}',
+                state: ToastStates.SUCCESS,
+              );
+            } else {
+              // Show Toast if Error in red Color
+              showToast(
+                message: '${state.loginModel?.message}',
+                state: ToastStates.ERROR,
+              );
             }
           }
         },
@@ -55,14 +66,11 @@ class LoginScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Login',
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .headline4
-                              ?.copyWith(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.headline4?.copyWith(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                         ),
                         //SizedBox between Login Text and Login to Start Text
                         const SizedBox(
@@ -70,8 +78,7 @@ class LoginScreen extends StatelessWidget {
                         ),
                         Text(
                           'Login to start brows our hot offers',
-                          style: Theme
-                              .of(context)
+                          style: Theme.of(context)
                               .textTheme
                               .bodyText1
                               ?.copyWith(color: Colors.grey),
@@ -85,15 +92,12 @@ class LoginScreen extends StatelessWidget {
                           controller: emailController,
                           keyboardType: TextInputType.emailAddress,
                           label: 'Email Address',
-                          onTap: () {},
                           validator: (String? value) {
-                            if(value!.isEmpty)
-                            {
+                            if (value!.isEmpty) {
                               return 'Please enter your email address';
                             }
-                           return null;
+                            return null;
                           },
-                          secure: false,
                           prefix: Icons.email_outlined,
                         ),
 
@@ -107,11 +111,8 @@ class LoginScreen extends StatelessWidget {
                           controller: passwordController,
                           keyboardType: TextInputType.visiblePassword,
                           label: 'Password',
-                          onTap: () {},
-                          validator: (String? value)
-                          {
-                            if(value!.isEmpty)
-                            {
+                          validator: (String? value) {
+                            if (value!.isEmpty) {
                               return 'Please enter your email address';
                             }
                             return null;
@@ -119,8 +120,7 @@ class LoginScreen extends StatelessWidget {
                           secure: LoginCubit.get(context).isPasswordShown,
                           prefix: Icons.password,
                           suffix: LoginCubit.get(context).suffix,
-                          suffixPressed: ()
-                          {
+                          suffixPressed: () {
                             LoginCubit.get(context).changePasswordVisibility();
                           },
                         ),
@@ -132,21 +132,19 @@ class LoginScreen extends StatelessWidget {
                         // Login Button
                         ConditionalBuilder(
                           condition: state is! LoginLoadingState,
-                          builder: (context) =>
-                              defaultButton(
-                                onPressed: () {
-                                  if(formKey.currentState!.validate())
-                                  {
-                                    LoginCubit.get(context).userLogin(
-                                      email: emailController.text,
-                                      password: passwordController.text,
-                                    );
-                                  }
-                                },
-                                text: 'Login',
-                              ),
+                          builder: (context) => defaultButton(
+                            onPressed: () {
+                              if (formKey.currentState!.validate()) {
+                                LoginCubit.get(context).userLogin(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                );
+                              }
+                            },
+                            text: 'Login',
+                          ),
                           fallback: (context) =>
-                          const Center(child: CircularProgressIndicator()),
+                              const Center(child: CircularProgressIndicator()),
                         ),
 
                         //SizedBox between Login Button and Don't have an account
@@ -165,7 +163,7 @@ class LoginScreen extends StatelessWidget {
                               onPressed: () {
                                 navigateTo(
                                   context,
-                                  const RegisterScreen(),
+                                  RegisterScreen(),
                                 );
                               },
                               text: 'REGISTER',

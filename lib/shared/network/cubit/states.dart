@@ -1,4 +1,5 @@
 import 'package:flutter_shop_app/models/change_favorites_model.dart';
+import 'package:flutter_shop_app/models/login_model.dart';
 
 abstract class AppStates {}
 
@@ -52,3 +53,33 @@ class AppChangeFavoritesSuccessState extends AppStates {
 }
 
 class AppChangeFavoritesErrorState extends AppStates {}
+
+// Get User Data From API State
+class AppGetUserDataLoadingState extends AppStates {}
+
+class AppGetUserDataSuccessState extends AppStates {
+  final LoginModel? loginModel;
+
+  AppGetUserDataSuccessState(this.loginModel);
+}
+
+class AppGetUserDataErrorState extends AppStates {
+  final String error;
+
+  AppGetUserDataErrorState(this.error);
+}
+
+// Get User Data From API State
+class AppUpdateUserDataLoadingState extends AppStates {}
+
+class AppUpdateUserDataSuccessState extends AppStates {
+  final LoginModel? loginModel;
+
+  AppUpdateUserDataSuccessState(this.loginModel);
+}
+
+class AppUpdateUserDataErrorState extends AppStates {
+  final String error;
+
+  AppUpdateUserDataErrorState(this.error);
+}
