@@ -54,6 +54,11 @@ class AppChangeFavoritesSuccessState extends AppStates {
 
 class AppChangeFavoritesErrorState extends AppStates {}
 
+// Get Favorite from api
+class AppGetFavoritesSuccessState extends AppStates {}
+
+class AppGetFavoritesErrorState extends AppStates {}
+
 // Get User Data From API State
 class AppGetUserDataLoadingState extends AppStates {}
 

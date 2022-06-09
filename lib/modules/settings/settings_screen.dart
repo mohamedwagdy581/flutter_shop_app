@@ -20,11 +20,11 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AppCubit, AppStates>(
       listener: (context, state) {
-        if (state is AppGetUserDataSuccessState) {
-          nameController.text = AppCubit.get(context).userModel!.data!.name!;
-          emailController.text = AppCubit.get(context).userModel!.data!.email!;
-          phoneController.text = AppCubit.get(context).userModel!.data!.phone!;
-        }
+        // if (state is AppGetUserDataSuccessState) {
+        //   nameController.text = AppCubit.get(context).userModel!.data!.name!;
+        //   emailController.text = AppCubit.get(context).userModel!.data!.email!;
+        //   phoneController.text = AppCubit.get(context).userModel!.data!.phone!;
+        // }
       },
       builder: (context, state) {
         LoginModel? model = AppCubit.get(context).userModel;

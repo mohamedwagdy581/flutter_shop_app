@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop_app/models/categories_model.dart';
 import 'package:flutter_shop_app/models/change_favorites_model.dart';
+import 'package:flutter_shop_app/models/favorites_model.dart';
 import 'package:flutter_shop_app/models/home_model.dart';
 import 'package:flutter_shop_app/modules/categories/categories_screen.dart';
 import 'package:flutter_shop_app/modules/favorites/favorites_screen.dart';
@@ -149,6 +150,20 @@ class AppCubit extends Cubit<AppStates> {
       favorites[productId] = !favorites[productId]!;
 
       emit(AppChangeFavoritesErrorState());
+    });
+  }
+
+  // Function to Get Favorites Data with API by using Dio
+  FavoritesModel? favoritesModel;
+  void getFavoritesModel() {
+    DioHelper.getData(
+      url: FAVORITES,
+      token: token,
+    ).then((value) {
+      favoritesModel = FavoritesModel.fromJson(value.data);
+      emit(AppGetFavoritesSuccessState());
+    }).catchError((error) {
+      emit(AppGetFavoritesErrorState());
     });
   }
 

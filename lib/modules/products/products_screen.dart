@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_shop_app/models/categories_model.dart';
@@ -22,23 +23,17 @@ class ProductsScreen extends StatelessWidget {
         }
       },
       builder: (BuildContext context, AppStates state) {
-        AppCubit cubit = AppCubit.get(context);
-        return (cubit.homeModel!.data.products.isNotEmpty &&
-                cubit.categoriesModel!.data!.data.isNotEmpty)
-            ? productsBuilder(cubit.homeModel!, cubit.categoriesModel!)
-            : const CircularProgressIndicator();
-
-        // ConditionalBuilder(
-        //   condition: AppCubit.get(context).homeModel != null &&
-        //       AppCubit.get(context).categoriesModel != null,
-        //   builder: (context) => productsBuilder(
-        //     AppCubit.get(context).homeModel!,
-        //     AppCubit.get(context).categoriesModel!,
-        //   ),
-        //   fallback: (context) => const Center(
-        //     child: CircularProgressIndicator(),
-        //   ),
-        // );
+        return ConditionalBuilder(
+          condition: AppCubit.get(context).homeModel != null &&
+              AppCubit.get(context).categoriesModel != null,
+          builder: (context) => productsBuilder(
+            AppCubit.get(context).homeModel!,
+            AppCubit.get(context).categoriesModel!,
+          ),
+          fallback: (context) => const Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
       },
     );
   }
